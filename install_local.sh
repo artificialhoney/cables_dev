@@ -44,7 +44,7 @@ if [ "$1" = "clean" ]; then
 	done
 fi
 
-ls ~/.nvm/nvm.sh > /dev/null 2>&1
+ls $NVM_DIR/nvm.sh > /dev/null 2>&1
 
 if [ "$?" -eq "0" ]; then
     echo -e "nvm FOUND...";
@@ -58,18 +58,17 @@ if [ "$?" -eq "0" ]; then
       fi
     fi
     echo -e "LOADING nodejs VERSION" `cat .nvmrc`
-    source ~/.nvm/nvm.sh
+    source $NVM_DIR/nvm.sh
     nvm install `cat .nvmrc`
     nvm use `cat .nvmrc`
-    nvm use
     nvm alias default `cat .nvmrc`
 else
     node --version > /dev/null 2>&1
     if [ "$?" -eq "0" ]; then
-    	echo -e "${RED}nvm NOT FOUND, RUNNING FOUND nodejs WITH VERSION${NC}" `node --version` "${RED} WANTED${NC}" `cat .nvmrc`;
+    	echo -e "${RED}nvm NOT FOUND, RUNNING FOUND nodejs WITH VERSION${NC}" `node --version` "${RED} WANTED${NC}" `cat .nvmrc | xargs`;
     else
     	echo -e "${RED}nvm NOT FOUND, nodejs NOT FOUND, PLEASE INSTALL VERSION${NC}" `cat .nvmrc`;
-	exit 1
+	    exit 1
     fi
 fi
 
@@ -84,8 +83,8 @@ if [ "$CLEAN" = "true" ]; then
   echo -e "  ...deleting node modules";
   rm -rf node_modules/
 fi
-git checkout develop
-git pull
+# git checkout develop
+# git pull
 npm install --no-save
 cd ..
 
